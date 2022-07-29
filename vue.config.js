@@ -21,6 +21,18 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: { '^/weibo-service': '/' }
       },
+      "^/aladdin99.github.io/weibo-service": {
+        target: "https://weibo.com/", //
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: { '^/aladdin99.github.io/weibo-service': '/' }
+      },
+      "^/aladdin99.github.io/juejin": {
+        target: "https://api.juejin.cn/", //
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: { '^/aladdin99.github.io/juejin': '/' }
+      },
     }
   },
   configureWebpack: {
