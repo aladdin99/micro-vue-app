@@ -1,94 +1,98 @@
 <template>
-  <div class="air_wrap">
-    <div class="air_wrap_inner">
-      <!-- 空调机 -->
-      <div class="air_condition">
-        <div class="air_top">
-          <div class="brand_left">
-            <div class="inner_box">
-              <!-- 顶部点标识 -->
-              <div class="inner_box_point_top">
-                <span v-for="item in 5" :key="item"><li></li></span>
-              </div>
+  <div class="air_conditioner">
+    <div class="air_wrap">
+      <div class="air_wrap_title">夏日空调</div>
 
-              <!-- 上部分-三包 -->
-              <div class="inner_box_top">
-                <div class="line">
-                  <span class="tag1"></span>
-                  <span class="tag4"></span>
+      <div class="air_wrap_inner">
+        <!-- 空调机 -->
+        <div class="air_condition">
+          <div class="air_top">
+            <div class="brand_left">
+              <div class="inner_box">
+                <!-- 顶部点标识 -->
+                <div class="inner_box_point_top">
+                  <span v-for="item in 5" :key="item"><li></li></span>
                 </div>
-                <div class="line"><span class="tag2"></span></div>
-                <div class="line"><span class="tag3"></span></div>
-              </div>
 
-              <!-- 下部分-出风口 -->
-              <div class="inner_box_bottom">
-                <div class="inner_box_bottom_line1">
-                  <span v-for="item in 7" :key="item"><li></li></span>
+                <!-- 上部分-三包 -->
+                <div class="inner_box_top">
+                  <div class="line">
+                    <span class="tag1"></span>
+                    <span class="tag4"></span>
+                  </div>
+                  <div class="line"><span class="tag2"></span></div>
+                  <div class="line"><span class="tag3"></span></div>
                 </div>
-                <div class="inner_box_bottom_line2">
-                  <div class="inner_box_bottom_line2_small">
-                    <div class="inner_box_bottom_line2_small1">
-                      <span v-for="item in 8" :key="item"><li></li></span>
-                    </div>
-                    <div class="inner_box_bottom_line2_small2">
-                      <span v-for="item in 8" :key="item"><li></li></span>
+
+                <!-- 下部分-出风口 -->
+                <div class="inner_box_bottom">
+                  <div class="inner_box_bottom_line1">
+                    <span v-for="item in 7" :key="item"><li></li></span>
+                  </div>
+                  <div class="inner_box_bottom_line2">
+                    <div class="inner_box_bottom_line2_small">
+                      <div class="inner_box_bottom_line2_small1">
+                        <span v-for="item in 8" :key="item"><li></li></span>
+                      </div>
+                      <div class="inner_box_bottom_line2_small2">
+                        <span v-for="item in 8" :key="item"><li></li></span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- 底部点标识 -->
-              <div class="inner_box_point_bottom">
-                <span v-for="item in 7" :key="item"><li></li></span>
+                <!-- 底部点标识 -->
+                <div class="inner_box_point_bottom">
+                  <span v-for="item in 7" :key="item"><li></li></span>
+                </div>
+              </div>
+            </div>
+            <div class="brand_right">
+              <div
+                v-if="firstSuspendFlag"
+                class="inner_box"
+                :class="{ airTemperature_hidden: suspendFlag }"
+              >
+                <div><img :src="snowflakeImg" width="30" /></div>
+                <!-- 气温 -->
+                <div>{{ airTemperature }}<span class="du_point"></span>C</div>
               </div>
             </div>
           </div>
-          <div class="brand_right">
-            <div
-              v-if="firstSuspendFlag"
-              class="inner_box"
-              :class="{ airTemperature_hidden: suspendFlag }"
-            >
-              <div><img :src="snowflakeImg" width="30" /></div>
-              <!-- 气温 -->
-              <div>{{ airTemperature }}<span class="du_point"></span>C</div>
-            </div>
+          <div class="air_bottom"></div>
+        </div>
+
+        <!-- 风向标 -->
+        <div class="wind_direction">
+          <img class="wd_left" :src="windDirection" width="30" />
+          <img class="wd_center" :src="windDirection" width="30" />
+          <img class="wd_right" :src="windDirection" width="30" />
+        </div>
+
+        <!-- 微博热榜 -->
+        <div class="content_warp">
+          <div>{{ realtime.note }}</div>
+          <div v-if="realtime.icon_desc_color">
+            <span :style="{ background: realtime.icon_desc_color }">{{
+              realtime.icon_desc
+            }}</span>
           </div>
         </div>
-        <div class="air_bottom"></div>
-      </div>
 
-      <!-- 风向标 -->
-      <div class="wind_direction">
-        <img class="wd_left" :src="windDirection" width="30" />
-        <img class="wd_center" :src="windDirection" width="30" />
-        <img class="wd_right" :src="windDirection" width="30" />
-      </div>
-
-      <!-- 微博热榜 -->
-      <div class="content_warp">
-        <div>{{ realtime.note }}</div>
-        <div>
-          <span :style="{ background: realtime.icon_desc_color }">{{
-            realtime.icon_desc
-          }}</span>
+        <!-- 遥控器 -->
+        <div class="remote_control">
+          <span @click="updownEvn(1)"><img :src="updown" width="20" /></span>
+          <span
+            @click="suspendEvn"
+            class="suspend_default"
+            :class="{
+              suspend_yes: suspendFlag && firstSuspendFlag,
+              suspend_no: !suspendFlag,
+            }"
+            ><img :src="openClose" width="20"
+          /></span>
+          <span @click="updownEvn(2)"><img :src="updown" width="20" /></span>
         </div>
-      </div>
-
-      <!-- 遥控器 -->
-      <div class="remote_control">
-        <span @click="updownEvn(1)"><img :src="updown" width="20" /></span>
-        <span
-          @click="suspendEvn"
-          class="suspend_default"
-          :class="{
-            suspend_yes: suspendFlag && firstSuspendFlag,
-            suspend_no: !suspendFlag,
-          }"
-          ><img :src="openClose" width="20"
-        /></span>
-        <span @click="updownEvn(2)"><img :src="updown" width="20" /></span>
       </div>
     </div>
   </div>
@@ -180,15 +184,30 @@ const ax = setInterval(() => {
 </script>
 
 <style scoped lang="scss">
+
+.air_conditioner{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
 .air_wrap {
   width: 30vw;
   height: 40vh;
-  margin-top: 20vh;
   display: inline-block;
   align-items: center;
   justify-content: center;
   min-width: 20rem;
   min-height: 17rem;
+}
+
+.air_wrap_title{
+  font-size: 3rem;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-family: "KaiTi";
 }
 
 .air_wrap_inner {
@@ -198,6 +217,7 @@ const ax = setInterval(() => {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  margin-top: 3vh;
 }
 
 /* 风向标 */
@@ -231,8 +251,7 @@ const ax = setInterval(() => {
 /* 热点 */
 .content_warp {
   width: 100%;
-  height: 2vw;
-  margin-top: 2vw;
+  margin: 3vh 0; 
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -246,19 +265,21 @@ const ax = setInterval(() => {
       white-space: nowrap;
       overflow: hidden;
       color: #8d8daa;
+      text-align: center;
     }
     &:nth-child(2) {
       width: 4vw;
 
       span {
         color: #fff;
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
+        width: 35px;
+        height: 35px;
+        line-height: 32px;
         text-align: center;
         display: inline-block;
         border-radius: 5px;
         font-size: 14px;
+        box-sizing: border-box;
       }
     }
   }
