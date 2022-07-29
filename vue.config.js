@@ -1,7 +1,7 @@
 const { name } = require('./package');
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/vue-admin-web/'
+    ? '/micro-vue-app/'
     : '/',
   devServer: {
     port: 3011,
